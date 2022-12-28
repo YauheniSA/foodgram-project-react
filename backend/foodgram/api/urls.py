@@ -1,13 +1,12 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from users.views import (CustomUserViewSet,
-                         SubscribeViewSet)
-from recipes.views import (TagViewSet,
-                           IngredientViewSet,
-                           RecipeViewSet,
-                           FavoriteViewSet,
-                           ShoppongCartViewSet)
+from favorites.views import (SubscribeViewSet,
+                             FavoriteViewSet,
+                             ShoppongCartViewSet)
+
+from users.views import CustomUserViewSet
+from recipes.views import TagViewSet, IngredientViewSet, RecipeViewSet
 
 
 app_name = 'api'
@@ -28,7 +27,6 @@ urlpatterns = [
          name='subscribe_create_delete'),
     path('recipes/<int:recipe_id>/shopping_cart/',
          ShoppongCartViewSet.as_view({'post': 'create', 'delete': 'destroy'}),
-         name='shopping_cart_create_delete'),         
+         name='shopping_cart_create_delete'),
     path(r'auth/', include('djoser.urls.authtoken')),
-
 ]

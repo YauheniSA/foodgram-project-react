@@ -62,34 +62,3 @@ class User(AbstractUser):
 
     def __str__(self) -> str:
         return self.username
-
-
-class Subscription(models.Model):
-    subscriber = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='subscriber',
-        verbose_name='Подписчик',
-        help_text='Кто подписан'
-    )
-    author = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='is_subscribed',
-        verbose_name='На кого подписан',
-        help_text='Имена авторов, на которых подписан'
-    )
-
-    class Meta:
-        verbose_name = 'Подписка'
-        verbose_name_plural = 'Подписки'
-        constraints = (
-            models.CheckConstraint(
-                name='constraint_self_follow',
-                check=~models.Q(subscriber=models.F('author'))
-            ),
-            models.UniqueConstraint(
-                name='follower_and_folowwing_have_unique_relationships',
-                fields=('subscriber', 'author')
-            )
-        )

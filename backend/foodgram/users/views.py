@@ -1,5 +1,4 @@
 from djoser.views import UserViewSet
-from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -7,10 +6,9 @@ from rest_framework.permissions import (IsAuthenticatedOrReadOnly,
                                         IsAuthenticated)
 
 
-from users.models import User, Subscription
-from users.serializers import UserSerializer, SubscribeSerializer
-
-from recipes.views import PostDeleteViewSet
+from users.models import User
+from users.serializers import UserSerializer
+from favorites.serializers import SubscribeSerializer
 
 
 class CustomUserViewSet(UserViewSet):
@@ -42,39 +40,12 @@ class CustomUserViewSet(UserViewSet):
         permission_classes=[IsAuthenticated, ]
     )
     def subscriptions(self, request):
-        user = request.user
-        serializer = UserSerializer(user)
+        context = {
+            'user': request.user,
+            'recipes_limit': request.query_params.get('recipes_limit')}
+
+        queryset = User.objects.filter(
+            is_subscribed__subscriber=self.request.user
+        ).all()
+        serializer = SubscribeSerializer(queryset, context=context, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class SubscribeViewSet(PostDeleteViewSet):
-    """Вьюсет для работы с моделью Subscribe."""
-
-    serializer_class = SubscribeSerializer
-    permission_classes = (IsAuthenticated, )
-
-    def create(self, request, **kwargs):
-        author = get_object_or_404(User, id=kwargs.get('user_id'))
-        if Subscription.objects.filter(
-                subscriber=request.user, author_id=author.id).exists():
-            return Response(
-                {'errors': 'Вы уже пописаны на этого автора'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        Subscription.objects.create(
-            subscriber=request.user, author_id=author.id)
-        serializer = SubscribeSerializer(author)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def destroy(self, request, **kwargs):
-        author = get_object_or_404(User, id=kwargs.get('user_id'))
-        if Subscription.objects.filter(
-                subscriber=request.user, author_id=author.id).exists():
-            Subscription.objects.filter(
-                subscriber=request.user, author_id=author).delete()
-            return Response(
-                {'message': 'Автор успешно удален из подписки'},
-                status=status.HTTP_204_NO_CONTENT)
-        return Response(
-                {'errors': 'Подписки на этого автора не существует!'},
-                status=status.HTTP_400_BAD_REQUEST)

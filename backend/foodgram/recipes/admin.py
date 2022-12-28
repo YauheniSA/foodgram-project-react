@@ -4,10 +4,7 @@ from recipes.models import (Tag,
                             Ingredient,
                             Recipe,
                             TagRecipe,
-                            IngredientRecipe,
-                            Favorite,
-                            ShoppingList
-)
+                            IngredientRecipe)
 
 
 @admin.register(Tag)
@@ -38,34 +35,19 @@ class RecipeAdmin(admin.ModelAdmin):
                     'author',
                     'name',
                     'text',
-                    'cooking_time',
-                    
-)
+                    'cooking_time')
 
 
 @admin.register(TagRecipe)
 class TagRecipeAdmin(admin.ModelAdmin):
     list_display = ('pk',
                     'tag',
-                    'recipe',
-    )
+                    'recipe')
+
 
 @admin.register(IngredientRecipe)
 class IngredientRecipeAdmin(admin.ModelAdmin):
     list_display = ('pk',
                     'ingredient',
                     'recipe',
-                    'amount'
-    )
-
-
-@admin.register(Favorite)
-class FavoriteAdmin(admin.ModelAdmin):
-    list_display = ('pk',
-                    'user',
-                    'recipe',
-    )
-
-@admin.register(ShoppingList)
-class ShoppingListAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'user', 'recipe')
+                    'amount')
