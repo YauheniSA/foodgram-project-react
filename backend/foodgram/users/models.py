@@ -4,14 +4,6 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     """Кастомная модель пользователя User"""
-    # Подумать нужны ли роли
-    USER = 'user'
-    ADMIN = 'admin'
-
-    CHOICES = (
-        (USER, 'user'),
-        (ADMIN, 'admin')
-    )
 
     email = models.EmailField(
         verbose_name='email',
@@ -40,17 +32,6 @@ class User(AbstractUser):
         help_text='Пароль',
         max_length=150
     )
-    role = models.CharField(
-        choices=CHOICES,
-        default=USER,
-        max_length=150,
-        verbose_name='role',
-        help_text='Права пользователя'
-    )
-
-    @property
-    def is_admin(self) -> bool:
-        return self.role == self.ADMIN
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'password']
@@ -62,3 +43,37 @@ class User(AbstractUser):
 
     def __str__(self) -> str:
         return self.username
+
+
+class Subscription(models.Model):
+    subscriber = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='subscriber',
+        verbose_name='Подписчик',
+        help_text='Кто подписан'
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='is_subscribed',
+        verbose_name='На кого подписан',
+        help_text='Имена авторов, на которых подписан'
+    )
+
+    class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
+        constraints = (
+            models.CheckConstraint(
+                name='constraint_self_follow',
+                check=~models.Q(subscriber=models.F('author'))
+            ),
+            models.UniqueConstraint(
+                name='follower_and_folowwing_have_unique_relationships',
+                fields=('subscriber', 'author')
+            )
+        )
+
+    def __str__(self) -> str:
+        return f'У {self.subscriber} подписан на {self.author}.'

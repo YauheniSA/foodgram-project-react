@@ -3,7 +3,7 @@ from colorfield.fields import ColorField
 from django.core.validators import MinValueValidator
 
 from users.models import User
-from foodgram.settings import MIN_COOKINGTIME
+from foodgram.settings import MIN_COOKING_TIME, MIN_AMOUNT
 
 
 class Tag(models.Model):
@@ -81,8 +81,8 @@ class Recipe(models.Model):
         verbose_name='text',
         help_text='Описание рецепта',
     )
-    cooking_time = models.IntegerField(
-        validators=[MinValueValidator(MIN_COOKINGTIME), ],
+    cooking_time = models.PositiveSmallIntegerField(
+        validators=(MinValueValidator(MIN_COOKING_TIME), ),
         verbose_name='cooking_time',
         help_text='Время приготовления, мин',
     )
@@ -118,6 +118,9 @@ class TagRecipe(models.Model):
             ),
         )
 
+    def __str__(self) -> str:
+        return f'Тег {self.tag} относится к рецепту {self.recipe}'
+
 
 class IngredientRecipe(models.Model):
     ingredient = models.ForeignKey(
@@ -135,7 +138,7 @@ class IngredientRecipe(models.Model):
     amount = models.PositiveSmallIntegerField(
         verbose_name='amount',
         help_text='Количество',
-        validators=[MinValueValidator(0.001), ]
+        validators=(MinValueValidator(MIN_AMOUNT), )
 
     )
 
@@ -148,3 +151,66 @@ class IngredientRecipe(models.Model):
                 fields=('ingredient', 'recipe')
             ),
         )
+
+    def __str__(self) -> str:
+        return f'{self.recipe} влючает в себя {self.amount} {self.ingredient}'
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(
+        User,
+        verbose_name='user',
+        related_name='favorite',
+        help_text='Кому понравился рецепт',
+        on_delete=models.CASCADE
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        verbose_name='recipe',
+        related_name='is_favorited',
+        help_text='Какой рецепт понравился',
+        on_delete=models.CASCADE
+    )
+
+    class Meta:
+        verbose_name = 'Избранный рецепт'
+        verbose_name_plural = 'Избранные рецепты'
+        constraints = (
+            models.UniqueConstraint(
+                name='user_and_favorite_recipe_have_unique_relationships',
+                fields=('user', 'recipe')
+            ),
+        )
+
+    def __str__(self) -> str:
+        return f'У {self.user} в избранном рецепт {self.recipe}.'
+
+
+class ShoppingList(models.Model):
+    user = models.ForeignKey(
+        User,
+        verbose_name='user',
+        related_name='shopping_list',
+        help_text='Кто добавил рецепт в список',
+        on_delete=models.CASCADE
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        verbose_name='recipe',
+        related_name='is_in_shopping_list',
+        help_text='Рецепт в списке покупок',
+        on_delete=models.CASCADE
+    )
+
+    class Meta:
+        verbose_name = 'Рецепт в списке покупок'
+        verbose_name_plural = 'Рецепты в списке покупок'
+        constraints = (
+            models.UniqueConstraint(
+                name='user_and_shopping_recipe_have_unique_relationships',
+                fields=('user', 'recipe')
+            ),
+        )
+
+    def __str__(self) -> str:
+        return f'У {self.user} в списке покупок рецепт {self.recipe}.'

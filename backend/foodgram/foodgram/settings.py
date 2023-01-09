@@ -20,7 +20,12 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-MIN_COOKINGTIME = 1
+MIN_COOKING_TIME = 1
+MIN_AMOUNT = 1
+CONTENT_TYPE = 'text/plain'
+
+STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -29,14 +34,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)^-mmh@dl89*px#1crt%$aixkr+4%wo*c0k&+4s9g1zwvb5@hc'
+SECRET_KEY = os.getenv('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
 AUTH_USER_MODEL = 'users.User'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*', '127.0.0.1']
 
 
 # Application definition
@@ -56,7 +62,6 @@ INSTALLED_APPS = [
     'users',
     'recipes',
     'api',
-    'favorites',
 ]
 
 MIDDLEWARE = [
@@ -99,8 +104,8 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT')
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', 5432)
     }
 }
 
@@ -162,11 +167,11 @@ REST_FRAMEWORK = {
 DJOSER = {
     'HIDE_USERS': False,
     'SERIALIZERS': {
-        'user_create': 'users.serializers.CustomUserCreateSerializer',
-        'user': 'users.serializers.UserSerializer',
+        'user_create': 'api.serializers.CustomUserCreateSerializer',
+        'user': 'api.serializers.UserSerializer',
         'set_password': 'djoser.serializers.SetPasswordSerializer',
-        'user_list': 'users.serializers.UserSerializer',
-        'current_user': 'users.serializers.UserSerializer',      
+        'user_list': 'api.serializers.UserSerializer',
+        'current_user': 'api.serializers.UserSerializer',      
         'activation': 'djoser.serializers.ActivationSerializer',
         'password_reset': 'djoser.serializers.SendEmailResetSerializer',
         'password_reset_confirm': 'djoser.serializers.PasswordResetConfirmSerializer',
@@ -191,11 +196,11 @@ DJOSER = {
         'username_reset': ['rest_framework.permissions.IsAdminUser'],
         'username_reset_confirm': ['rest_framework.permissions.IsAdminUser'],
         'set_username': ['rest_framework.permissions.IsAdminUser'],
-        'user_create': ['users.permissions.IsGuest'],
+        'user_create': ['api.permissions.IsGuest'],
         'user_delete': ['rest_framework.permissions.IsAdminUser'],
         'user': ['rest_framework.permissions.IsAuthenticated'],
         'user_list': ['rest_framework.permissions.AllowAny'],
-        'token_create': ['users.permissions.IsGuest'],
+        'token_create': ['api.permissions.IsGuest'],
         'token_destroy': ['rest_framework.permissions.IsAuthenticated'],
 }
 }
