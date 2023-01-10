@@ -1,6 +1,7 @@
 from djoser.views import UserViewSet
-from rest_framework import status, mixins, viewsets, filters
+from rest_framework import status, mixins, viewsets
 from rest_framework.response import Response
+from django.http import HttpResponse
 from rest_framework.decorators import action
 from rest_framework.permissions import (IsAuthenticatedOrReadOnly,
                                         IsAuthenticated)
@@ -16,7 +17,7 @@ from api.serializers import (UserSerializer, SubscribeSerializer,
                              RecipePostPatchSerializer,
                              IngredientSerializer,
                              RecipeShortSerializer)
-from api.filters import RecipeFilter
+from api.filters import RecipeFilter, IngredientFilter
 from api.permissions import IsAdminOwnerOrReadOnly
 
 
@@ -61,17 +62,18 @@ class CustomUserViewSet(UserViewSet):
     @action(
         methods=['get'],
         detail=False,
-        permission_classes=(IsAuthenticated, )
+        permission_classes=(IsAuthenticatedOrReadOnly, ),
     )
     def subscriptions(self, request):
         context = {
             'user': request.user,
             'recipes_limit': request.query_params.get('recipes_limit')}
         queryset = User.objects.filter(
-            is_subscribed__subscriber=self.request.user
-        ).all()
-        serializer = SubscribeSerializer(queryset, context=context, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+           is_subscribed__subscriber=request.user
+        )
+        pages = self.paginate_queryset(queryset)
+        serializer = SubscribeSerializer(pages, context=context, many=True)
+        return self.get_paginated_response(serializer.data)
 
 
 class TagViewSet(ListRetrieveViewSet):
@@ -88,9 +90,9 @@ class IngredientViewSet(TagViewSet):
 
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('name',)
-    permission_classes = (IsAuthenticated,)
+    filter_backends = (DjangoFilterBackend, )
+    filterset_class = IngredientFilter
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -132,7 +134,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             measurement = obj.get('ingredient__measurement_unit')
             amount = obj.get('ingredient_sum')
             data.append(f'{name} | {amount} | {measurement}')
-        return Response("  ".join(data), content_type=CONTENT_TYPE)
+        return HttpResponse("\r\n".join(data), content_type=CONTENT_TYPE)
 
 
 class FavoriteViewSet(PostDeleteViewSet):
