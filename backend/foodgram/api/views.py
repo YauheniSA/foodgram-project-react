@@ -18,7 +18,9 @@ from api.serializers import (UserSerializer, SubscribeSerializer,
                              RecipeShortSerializer)
 from api.filters import RecipeFilter
 from api.permissions import IsAdminOwnerOrReadOnly
-from foodgram.settings import CONTENT_TYPE
+
+
+CONTENT_TYPE = 'text/plain'
 
 
 class ListRetrieveViewSet(mixins.ListModelMixin,
