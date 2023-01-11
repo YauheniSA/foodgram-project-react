@@ -1,25 +1,22 @@
-from djoser.views import UserViewSet
-from rest_framework import status, mixins, viewsets
-from rest_framework.response import Response
-from django.http import HttpResponse
-from rest_framework.decorators import action
-from rest_framework.permissions import (IsAuthenticatedOrReadOnly,
-                                        IsAuthenticated)
-from django.db.models import Sum
-from django_filters.rest_framework import DjangoFilterBackend
-from django.shortcuts import get_object_or_404
-
-from users.models import User, Subscription
-from recipes.models import (Tag, Ingredient, IngredientRecipe,
-                            Recipe, Favorite, ShoppingList)
-from api.serializers import (UserSerializer, SubscribeSerializer,
-                             TagSerializer, RecipeGetSerializer,
-                             RecipePostPatchSerializer,
-                             IngredientSerializer,
-                             RecipeShortSerializer)
-from api.filters import RecipeFilter, IngredientFilter
+from api.filters import IngredientFilter, RecipeFilter
 from api.permissions import IsAdminOwnerOrReadOnly
-
+from api.serializers import (IngredientSerializer, RecipeGetSerializer,
+                             RecipePostPatchSerializer, RecipeShortSerializer,
+                             SubscribeSerializer, TagSerializer,
+                             UserSerializer)
+from django.db.models import Sum
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
+from djoser.views import UserViewSet
+from recipes.models import (Favorite, Ingredient, IngredientRecipe, Recipe,
+                            ShoppingList, Tag)
+from rest_framework import mixins, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import (IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
+from rest_framework.response import Response
+from users.models import Subscription, User
 
 CONTENT_TYPE = 'text/plain'
 

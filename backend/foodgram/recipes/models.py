@@ -1,9 +1,8 @@
-from django.db import models
 from colorfield.fields import ColorField
 from django.core.validators import MinValueValidator
-
+from django.db import models
+from foodgram.settings import MIN_AMOUNT, MIN_COOKING_TIME
 from users.models import User
-from foodgram.settings import MIN_COOKING_TIME, MIN_AMOUNT
 
 
 class Tag(models.Model):

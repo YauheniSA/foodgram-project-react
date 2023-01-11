@@ -1,16 +1,14 @@
 import base64
 
-from rest_framework import serializers, status
 from django.core.files.base import ContentFile
-from rest_framework.validators import UniqueValidator
-from djoser.serializers import UserCreateSerializer
 from django.db import transaction
-
-from users.models import User, Subscription
-from recipes.models import (Tag, Ingredient, Recipe,
-                            IngredientRecipe, TagRecipe, Favorite,
-                            ShoppingList)
+from djoser.serializers import UserCreateSerializer
 from foodgram.settings import MIN_AMOUNT, MIN_COOKING_TIME
+from recipes.models import (Favorite, Ingredient, IngredientRecipe, Recipe,
+                            ShoppingList, Tag, TagRecipe)
+from rest_framework import serializers, status
+from rest_framework.validators import UniqueValidator
+from users.models import Subscription, User
 
 
 class UserSerializer(serializers.ModelSerializer):
