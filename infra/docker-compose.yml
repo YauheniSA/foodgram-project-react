@@ -3,14 +3,13 @@ services:
   
   db:
     image: postgres:13.0-alpine
-    restart: always
     volumes:
       - db_storage:/var/lib/postgresql/data/
     env_file:
       - ./.env
   
   backend:
-    build: semashkevichea/foodgram:latest
+    image: semashkevichea/foodgram:latest
     restart: always
     depends_on:
       - db
@@ -21,9 +20,7 @@ services:
       - ./.env
     
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: semashkevichea/frontend_foodgram:latest
     volumes:
       - ../frontend/:/app/result_build/
 
