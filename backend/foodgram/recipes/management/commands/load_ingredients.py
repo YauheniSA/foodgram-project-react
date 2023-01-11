@@ -7,7 +7,7 @@ from recipes.models import Ingredient
 class Command(BaseCommand):
     def handle(self, *args, **options):
 
-        with open('../../data/ingredients.json',
+        with open('recipes/management/data/ingredients.json',
                   'r',
                   encoding="utf-8") as file:
             data = json.load(file)
