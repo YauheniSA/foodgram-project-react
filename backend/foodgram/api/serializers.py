@@ -149,7 +149,7 @@ class RecipePostPatchSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         serializer = RecipeGetSerializer(
             instance, context={'request': self.context.get('request')}
-            )
+        )
         return serializer.data
 
     def validate(self, data):
@@ -165,8 +165,8 @@ class RecipePostPatchSerializer(serializers.ModelSerializer):
                 )
         if data['cooking_time'] < MIN_COOKING_TIME:
             raise serializers.ValidationError(
-                    'Укажите верное время приготовления блюда'
-                )
+                'Укажите верное время приготовления блюда'
+            )
         return data
 
     @transaction.atomic

@@ -66,7 +66,7 @@ class CustomUserViewSet(UserViewSet):
             'user': request.user,
             'recipes_limit': request.query_params.get('recipes_limit')}
         queryset = User.objects.filter(
-           is_subscribed__subscriber=request.user
+            is_subscribed__subscriber=request.user
         )
         pages = self.paginate_queryset(queryset)
         serializer = SubscribeSerializer(pages, context=context, many=True)
@@ -118,7 +118,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ingredients = IngredientRecipe.objects.filter(
             recipe__is_in_shopping_list__user=request.user
         ).values(
-            'ingredient__name',  'ingredient__measurement_unit'
+            'ingredient__name', 'ingredient__measurement_unit'
         ).order_by(
             'ingredient__name'
         ).annotate(ingredient_sum=Sum('amount'))
@@ -162,8 +162,8 @@ class FavoriteViewSet(PostDeleteViewSet):
                 {'message': 'Рецепт успешно удален из избранного'},
                 status=status.HTTP_204_NO_CONTENT)
         return Response(
-                {'errors': 'Такого рецепта нет в избранном!'},
-                status=status.HTTP_400_BAD_REQUEST)
+            {'errors': 'Такого рецепта нет в избранном!'},
+            status=status.HTTP_400_BAD_REQUEST)
 
 
 class ShoppongCartViewSet(FavoriteViewSet):
@@ -192,8 +192,8 @@ class ShoppongCartViewSet(FavoriteViewSet):
                 {'message': 'Рецепт успешно удален из списка покупок'},
                 status=status.HTTP_204_NO_CONTENT)
         return Response(
-                {'errors': 'Такого рецепта нет в списке покупок!'},
-                status=status.HTTP_400_BAD_REQUEST)
+            {'errors': 'Такого рецепта нет в списке покупок!'},
+            status=status.HTTP_400_BAD_REQUEST)
 
 
 class SubscribeViewSet(PostDeleteViewSet):
@@ -224,5 +224,5 @@ class SubscribeViewSet(PostDeleteViewSet):
                 {'message': 'Автор успешно удален из подписки'},
                 status=status.HTTP_204_NO_CONTENT)
         return Response(
-                {'errors': 'Подписки на этого автора не существует!'},
-                status=status.HTTP_400_BAD_REQUEST)
+            {'errors': 'Подписки на этого автора не существует!'},
+            status=status.HTTP_400_BAD_REQUEST)

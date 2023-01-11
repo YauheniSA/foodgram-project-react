@@ -169,7 +169,7 @@ DJOSER = {
         'user': 'api.serializers.UserSerializer',
         'set_password': 'djoser.serializers.SetPasswordSerializer',
         'user_list': 'api.serializers.UserSerializer',
-        'current_user': 'api.serializers.UserSerializer',      
+        'current_user': 'api.serializers.UserSerializer',
         'activation': 'djoser.serializers.ActivationSerializer',
         'password_reset': 'djoser.serializers.SendEmailResetSerializer',
         'password_reset_confirm': 'djoser.serializers.PasswordResetConfirmSerializer',
@@ -185,7 +185,7 @@ DJOSER = {
         'token': 'djoser.serializers.TokenSerializer',
         'token_create': 'djoser.serializers.TokenCreateSerializer',
     },
-    
+
     'PERMISSIONS': {
         'activation': ['rest_framework.permissions.IsAdminUser'],
         'password_reset': ['rest_framework.permissions.IsAdminUser'],
@@ -200,5 +200,5 @@ DJOSER = {
         'user_list': ['rest_framework.permissions.AllowAny'],
         'token_create': ['api.permissions.IsGuest'],
         'token_destroy': ['rest_framework.permissions.IsAuthenticated'],
-}
+    }
 }
