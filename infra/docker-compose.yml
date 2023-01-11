@@ -2,7 +2,7 @@ version: '3.3'
 services:
   
   nginx:
-    image: nginx:1.21.3-alpine
+    image: nginx:1.19.3
     depends_on:
       - backend
     ports:
