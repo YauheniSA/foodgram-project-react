@@ -1,4 +1,4 @@
-![workflow badge](https://github.com/YauheniSA/foodgram-project-react/.github/workflows/main.yml/badge.svg)
+![workflow badge](https://github.com/YauheniSA/foodgram-project-react/actions/workflows/main.yml/badge.svg)
 
 ![Jokes Card](https://readme-jokes.vercel.app/api)
 
