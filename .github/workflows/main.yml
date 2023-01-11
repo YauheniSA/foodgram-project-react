@@ -71,8 +71,6 @@ jobs:
             sudo echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             sudo echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             sudo echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            sudo docker pull semashkevichea/frontend_foodgram:latest
-            sudo docker pull semashkevichea/foodgram:latest
             sudo docker-compose up --build
   send_message:
     runs-on: ubuntu-latest
