@@ -24,11 +24,9 @@ MIN_COOKING_TIME = 1
 MIN_AMOUNT = 1
 
 STATIC_URL = '/static/'
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Quick-start development settings - unsuitable for production
@@ -43,7 +41,7 @@ DEBUG = os.getenv('DEBUG')
 
 AUTH_USER_MODEL = 'users.User'
 
-ALLOWED_HOSTS = ['*', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '158.160.36.188']
 
 
 # Application definition
