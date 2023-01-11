@@ -8,7 +8,7 @@ cryptography==37.0.4
 cssselect2==0.6.0
 defusedxml==0.7.1
 Django==3.2.14
-django-colorfield==0.7.1
+django-colorfield==0.8.0
 django-extra-fields==3.0.2
 django-filter==22.1
 django-templated-mail==1.1.1
