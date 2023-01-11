@@ -1,4 +1,4 @@
-![workflow badge](https://github.com/YauheniSA/foodgram-project-react/blob/master/.github/workflows/main.yml/badge.svg)
+![workflow badge](https://github.com/YauheniSA/foodgram-project-react/.github/workflows/main.yml/badge.svg)
 
 ![Jokes Card](https://readme-jokes.vercel.app/api)
 
@@ -111,6 +111,7 @@ POSTGRES_USER - postgres
 POSTGRES_PASSWORD - postgres
 DB_HOST  - db
 DB_PORT - 5432
+```
 
 Сборка образа и запуск контейнеров:
 ```
