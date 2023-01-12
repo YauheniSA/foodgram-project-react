@@ -1,6 +1,10 @@
 version: '3.3'
 services:
-  
+  frontend:
+    image: semashkevichea/frontend_foodgram:latest
+    volumes:
+      - ../frontend/:/app/result_build/ 
+
   nginx:
     image: nginx:1.19.3
     depends_on:
@@ -32,10 +36,7 @@ services:
     env_file:
       - ./.env
     
-  frontend:
-    image: semashkevichea/frontend_foodgram:latest
-    volumes:
-      - ../frontend/:/app/result_build/
+
 
 volumes:
   db_storage:
