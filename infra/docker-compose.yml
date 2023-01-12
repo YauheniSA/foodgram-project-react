@@ -7,8 +7,6 @@ services:
 
   nginx:
     image: nginx:1.19.3
-    depends_on:
-      - backend
     ports:
       - "80:80"
     volumes:
@@ -28,8 +26,6 @@ services:
   backend:
     image: semashkevichea/foodgram:latest
     restart: always
-    depends_on:
-      - db
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
