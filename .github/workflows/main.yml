@@ -62,6 +62,9 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             sudo docker-compose stop
+            sudo docker-compose rm -f
+            sudo docker image rm semashkevichea/foodgram_frontend:latest
+            sudo docker image rm semashkevichea/foodgram:latest
             sudo touch .env
             sudo echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             sudo echo DB_NAME=${{ secrets.DB_NAME }} >> .env
